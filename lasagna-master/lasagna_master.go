@@ -1,5 +1,7 @@
 package lasagna
 
+import "strings"
+
 func PreparationTime(layers []string, time int) int {
 	if time == 0 {
 		time = 2
@@ -8,14 +10,8 @@ func PreparationTime(layers []string, time int) int {
 }
 
 func Quantities(layers []string) (noddlesG int, sauceL float64) {
-	for _, layer := range layers {
-		if layer == "noodles" {
-			noddlesG += 50
-		}
-		if layer == "sauce" {
-			sauceL += 0.2
-		}
-	}
+	noddlesG = strings.Count(strings.Join(layers, ""), "noodles") * 50
+	sauceL = float64(strings.Count(strings.Join(layers, ""), "sauce")) * 0.2
 	return
 }
 
@@ -23,10 +19,9 @@ func AddSecretIngredient(friendsList, myList []string) {
 	myList[len(myList)-1] = friendsList[len(friendsList)-1]
 }
 
-func ScaleRecipe(quantities []float64, scale int) []float64 {
-	result := make([]float64, len(quantities))
-	for i, quantity := range quantities {
-		result[i] = (quantity / 2.0) * float64(scale)
+func ScaleRecipe(quantities []float64, scale int) (result []float64) {
+	for _, quantity := range quantities {
+		result = append(result, (quantity/2.0)*float64(scale))
 	}
 	return result
 }
