@@ -33,26 +33,24 @@ func AddItem(bill, units map[string]int, item, unit string) bool {
 
 // RemoveItem removes an item from customer bill.
 func RemoveItem(bill, units map[string]int, item, unit string) bool {
-	if inBill, ok := bill[item]; !ok {
+	unitNum, inUnits := units[unit]
+	billItem, onBill := bill[item]
+	if !onBill || !inUnits || billItem-unitNum < 0 {
 		return false
-	} else {
-		if qty, ok := units[unit]; ok {
-			if inBill-qty <= 0 {
-				return false
-			}
-			//println("unit", unit, qty)
-		} else {
-			return false
-		}
-		//println("item", item, qty)
-		//if qty < 0 {
-		//	return false
-		//}
+	}
+
+	bill[item] -= unitNum
+	if bill[item] == 0 {
+		delete(bill, item)
 	}
 	return true
 }
 
 // GetItem returns the quantity of an item that the customer has in his/her bill.
 func GetItem(bill map[string]int, item string) (int, bool) {
-	panic("Please implement the GetItem() function")
+	qty, ok := bill[item]
+	if !ok {
+		return 0, false
+	}
+	return qty, true
 }
