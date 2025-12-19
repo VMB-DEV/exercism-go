@@ -12,8 +12,5 @@ func Convert(number int) (ret string) {
 	if number%7 == 0 {
 		ret += "Plong"
 	}
-	if len(ret) == 0 {
-		ret = strconv.Itoa(number)
-	}
-	return
+	return map[bool]string{true: ret, false: strconv.Itoa(number)}[len(ret) != 0]
 }
