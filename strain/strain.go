@@ -7,18 +7,18 @@ package strain
 // them here: https://go.dev/tour/generics/1
 
 func Keep[T any](list []T, filter func(T) bool) (result []T) {
-	for _, str := range list {
-		if filter(str) {
-			result = append(result, str)
+	for _, item := range list {
+		if filter(item) {
+			result = append(result, item)
 		}
 	}
 	return result
 }
 
 func Discard[T any](list []T, filter func(T) bool) (result []T) {
-	for _, str := range list {
-		if !filter(str) {
-			result = append(result, str)
+	for _, item := range list {
+		if !filter(item) {
+			result = append(result, item)
 		}
 	}
 	return result
