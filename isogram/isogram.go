@@ -3,7 +3,6 @@ package isogram
 import "strings"
 
 func IsIsogram(word string) bool {
-	//registeredChars := make(map[int32]struct{})
 	registeredChars := make(map[int32]struct{})
 	for _, char := range strings.ToLower(word) {
 		if _, exists := registeredChars[char]; !exists {
