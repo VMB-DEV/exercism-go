@@ -1,12 +1,14 @@
 package isogram
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
 
 func IsIsogram(word string) bool {
-	registeredChars := make(map[int32]struct{})
+	registeredChars := make(map[rune]struct{})
 	for _, char := range strings.ToLower(word) {
-		countThisChar := char != '-' && char != ' '
-		if countThisChar {
+		if unicode.IsLetter(char) {
 			if _, exists := registeredChars[char]; !exists {
 				registeredChars[char] = struct{}{}
 			} else {
