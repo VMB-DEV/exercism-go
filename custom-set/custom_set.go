@@ -8,33 +8,54 @@ package stringset
 // Format the empty set as {}.
 
 // Define the Set type here.
+type Set map[string]struct{}
 
 func New() Set {
-	panic("Please implement the New function")
+	return map[string]struct{}{}
 }
 
 func NewFromSlice(l []string) Set {
-	panic("Please implement the NewFromSlice function")
+	var set map[string]struct{}
+	for _, str := range l {
+		if _, present := set[str]; !present {
+			set[str] = struct{}{}
+		}
+	}
+	return set
 }
 
 func (s Set) String() string {
-	panic("Please implement the String function")
+	var str string
+	for element, _ := range s {
+		str += element
+	}
+	return str
 }
 
 func (s Set) IsEmpty() bool {
-	panic("Please implement the IsEmpty function")
+	return s.IsEmpty()
 }
 
 func (s Set) Has(elem string) bool {
-	panic("Please implement the Has function")
+	_, has := s[elem]
+	return has
 }
 
 func (s Set) Add(elem string) {
-	panic("Please implement the Add function")
+	if !s.Has(elem) {
+		s[elem] = struct{}{}
+	}
 }
 
 func Subset(s1, s2 Set) bool {
-	panic("Please implement the Subset function")
+	for element, _ := range s2 {
+		if s1.Has(element) {
+			delete(s1, element)
+		} else {
+			return false
+		}
+	}
+	return true
 }
 
 func Disjoint(s1, s2 Set) bool {
@@ -42,17 +63,26 @@ func Disjoint(s1, s2 Set) bool {
 }
 
 func Equal(s1, s2 Set) bool {
-	panic("Please implement the Equal function")
+	if len(s1) != len(s2) {
+		return false
+	}
+	for element, _ := range s2 {
+		if !s1.Has(element) {
+			return false
+		}
+	}
 }
 
 func Intersection(s1, s2 Set) Set {
-	panic("Please implement the Intersection function")
+	inter := New()
+	for element, _ := range s1 {
+
+	}
 }
 
 func Difference(s1, s2 Set) Set {
-	panic("Please implement the Difference function")
+
 }
 
 func Union(s1, s2 Set) Set {
-	panic("Please implement the Union function")
 }
