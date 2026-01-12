@@ -1,5 +1,10 @@
 package stringset
 
+import (
+	"fmt"
+	"strings"
+)
+
 // Implement Set as a collection of unique string values.
 //
 // For Set.String, use '{' and '}', output elements as double-quoted strings
@@ -15,7 +20,7 @@ func New() Set {
 }
 
 func NewFromSlice(l []string) Set {
-	var set map[string]struct{}
+	set := New()
 	for _, str := range l {
 		if _, present := set[str]; !present {
 			set[str] = struct{}{}
@@ -24,16 +29,23 @@ func NewFromSlice(l []string) Set {
 	return set
 }
 
-func (s Set) String() string {
-	var str string
-	for element, _ := range s {
-		str += element
+func formatStringSliceIntoString(strSlice []string) string {
+	for i, element := range strSlice {
+		strSlice[i] = fmt.Sprintf("\"%s\"", element)
 	}
-	return str
+	return fmt.Sprintf("{%s}", strings.Join(strSlice, ", "))
+}
+
+func (s Set) String() string {
+	var strs []string
+	for element, _ := range s {
+		strs = append(strs, element)
+	}
+	return formatStringSliceIntoString(strs)
 }
 
 func (s Set) IsEmpty() bool {
-	return s.IsEmpty()
+	return len(s) == 0
 }
 
 func (s Set) Has(elem string) bool {
@@ -48,10 +60,11 @@ func (s Set) Add(elem string) {
 }
 
 func Subset(s1, s2 Set) bool {
-	for element, _ := range s2 {
-		if s1.Has(element) {
-			delete(s1, element)
-		} else {
+	if s1.IsEmpty() {
+		return true
+	}
+	for element, _ := range s1 {
+		if !s2.Has(element) {
 			return false
 		}
 	}
@@ -59,7 +72,7 @@ func Subset(s1, s2 Set) bool {
 }
 
 func Disjoint(s1, s2 Set) bool {
-	panic("Please implement the Disjoint function")
+	return Intersection(s1, s2).IsEmpty()
 }
 
 func Equal(s1, s2 Set) bool {
@@ -71,18 +84,45 @@ func Equal(s1, s2 Set) bool {
 			return false
 		}
 	}
+	return true
 }
 
 func Intersection(s1, s2 Set) Set {
 	inter := New()
 	for element, _ := range s1 {
-
+		if _, exists := s2[element]; exists {
+			inter[element] = struct{}{}
+		}
 	}
+	return inter
 }
 
 func Difference(s1, s2 Set) Set {
+	inter := New()
+	for element, _ := range s1 {
+		if _, exists := s2[element]; !exists {
+			inter[element] = struct{}{}
+		}
+	}
+	return inter
+}
 
+func cloneSet(s Set) Set {
+	clonedSet := New()
+	for element, _ := range s {
+		clonedSet[element] = struct{}{}
+	}
+	return clonedSet
 }
 
 func Union(s1, s2 Set) Set {
+	union := cloneSet(s2)
+	if s1.IsEmpty() {
+		return union
+	}
+	diff := Difference(s1, s2)
+	for element, _ := range diff {
+		union[element] = struct{}{}
+	}
+	return union
 }
