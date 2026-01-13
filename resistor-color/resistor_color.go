@@ -24,5 +24,9 @@ func Colors() []string {
 
 // ColorCode returns the resistance value of the given color.
 func ColorCode(color string) int {
-	return colorCode[color]
+	if code, exists := colorCode[color]; exists {
+		return code
+	} else {
+		return -1
+	}
 }
